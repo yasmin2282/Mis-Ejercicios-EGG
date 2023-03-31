@@ -1,0 +1,86 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+
+public class Cocina {
+
+    private List<Receta> recetas;
+
+    public Cocina() {
+        this.recetas = new ArrayList<>();
+    }
+
+    public void agregarReceta(Receta receta) {
+        recetas.add(receta);
+    }
+
+    public Receta buscarRecetaPorNombre(String nombre) {
+        for (Receta receta : recetas) {
+            if (receta.getNombre().equalsIgnoreCase(nombre)) {
+                return receta;
+            }
+        }
+        return null;
+    }
+
+    public List<Receta> recetasConIngredientesDisponibles(Set<String> ingredientesDisponibles) {
+        List<Receta> recetasPreparables = new ArrayList<>();
+        for (Receta receta : recetas) {
+            if (ingredientesDisponibles.containsAll(receta.getIngredientes())) {
+                recetasPreparables.add(receta);
+            }
+        }
+        return recetasPreparables;
+    }
+
+    public static class Receta {
+        private String nombre;
+        private Set<String> ingredientes;
+
+        public Receta(String nombre, Set<String> ingredientes) {
+            this.nombre = nombre;
+            this.ingredientes = ingredientes;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public Set<String> getIngredientes() {
+            return ingredientes;
+        }
+    }
+
+    public static void main(String[] args) {
+        Cocina cocina = new Cocina();
+
+        Set<String> ingredientesPizza = new HashSet<>();
+        ingredientesPizza.add("harina");
+        ingredientesPizza.add("levadura");
+        ingredientesPizza.add("agua");
+        ingredientesPizza.add("sal");
+        ingredientesPizza.add("aceite");
+        ingredientesPizza.add("salsa de tomate");
+        ingredientesPizza.add("queso");
+
+        Receta pizza = new Receta("Pizza", ingredientesPizza);
+        cocina.agregarReceta(pizza);
+
+        // Agregar más recetas aquí
+
+        Set<String> ingredientesDisponibles = new HashSet<>();
+        ingredientesDisponibles.add("harina");
+        ingredientesDisponibles.add("levadura");
+        ingredientesDisponibles.add("agua");
+        ingredientesDisponibles.add("sal");
+        ingredientesDisponibles.add("aceite");
+        ingredientesDisponibles.add("salsa de tomate");
+        ingredientesDisponibles.add("queso");
+
+        List<Receta> recetasPreparables = cocina.recetasConIngredientesDisponibles(ingredientesDisponibles);
+        for (Receta recetaPreparable : recetasPreparables) {
+            System.out.println("Se puede preparar: " + recetaPreparable.getNombre());
+        }
+    }
+}
